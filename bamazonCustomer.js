@@ -1,4 +1,5 @@
-var mysql = require("mysql");
+const mysql = require("mysql");
+const inquirer = require("inquirer");
 
 var connection = mysql.createConnection(
 {
@@ -24,3 +25,36 @@ connection.query("Select * FROM products", function(err, res){
 	console.log("-----------------");
 });
 
+inquirer.prompt([
+	{
+		type: "input",
+		message: "Please provide the ID of the product you would like to purchase.",
+		name: "id"
+	},
+
+	{
+		type: "input", 
+		message: "How many units of the product would you like to buy?",
+		name: "amount"
+	},
+
+	{
+		type: "confirm",
+		message: "Are you sure?",
+		name: "confirm",
+		default: true
+	}
+
+]).then(function(user){
+
+	console.log(JSON.stringify(user, null, 2));
+
+	if (user.confirm){
+		console.log("You want " + user.id);
+		console.log("You want " + user.amount + " of them.");
+	}
+
+	else{
+		console.log("Come back when you are ready.")
+	}
+});
