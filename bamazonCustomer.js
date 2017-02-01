@@ -1,6 +1,6 @@
-const mysql = require("mysql");
-const inquirer = require("inquirer");
-const Table = require ("cli-table");
+var mysql = require("mysql");
+var inquirer = require("inquirer");
+var Table = require ("cli-table");
 
 
 var connection = mysql.createConnection(
@@ -43,12 +43,12 @@ inquirer.prompt([
 
 
 ]).then(function(response){
-
+	console.log(response.toString());
 	// Now, we are going to select the stock_quantitycolumn from the products table where the item_id is equal to the id entered by the user.
-	connection.query("SELECT stock_quantity, product_name, price FROM products WHERE item_id = " + response.id, function(error, res){
+	connection.query("SELECT stock_quantity, product_name, price FROM products WHERE item_id = " + response.id, function(err, res){
 
-		if (error){
-			throw error;
+		if (err){
+			throw err;
 		}
 
 		// Now, we are going to write a conditional if statement that says if there is more in stock than requested, then we are going to update the amount available using the amount purchased as the reduction amount.
@@ -72,7 +72,7 @@ inquirer.prompt([
 		}
 
 		else {
-			console.log("We do not have enough of " + res[0].product_name + " in stock to sell you.")
+			console.log("We do not have enough of " + res[0].product_name + " in stock to sell you.");
 		}
 
 	});
