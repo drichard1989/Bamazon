@@ -43,10 +43,10 @@ inquirer.prompt([
 
 
 ]).then(function(response){
-	console.log(response.toString());
+	console.log(response);
 	// Now, we are going to select the stock_quantitycolumn from the products table where the item_id is equal to the id entered by the user.
-	connection.query("SELECT stock_quantity, product_name, price FROM products WHERE item_id = " + response.id, function(err, res){
-
+	connection.query("SELECT stock_quantity, product_name, price FROM products WHERE item_id = ?" , [response.id], function(err, res){
+		console.log(res);
 		if (err){
 			throw err;
 		}
@@ -54,8 +54,8 @@ inquirer.prompt([
 		// Now, we are going to write a conditional if statement that says if there is more in stock than requested, then we are going to update the amount available using the amount purchased as the reduction amount.
 
 		if (res[0].stock_quantity >= response.amount) {
-			var updateStockQuantity = res[0].stock_quantity - response.amount;
-			connection.query('UPDATE products SET stock_quantity = ' + updateStockQuantity + "WHERE item_id = " + response.chosen_id, function(error, result){
+			connection.query("UPDATE products SET stock_quantity = ? WHERE item_id = ?",  [response.amount, response.id], function(error, result){
+
 				if(error){
 					throw error;
 				}
