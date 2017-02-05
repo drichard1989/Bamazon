@@ -5,6 +5,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var myPassword = require('./keys.js');
+var table = require ("console.table");
 
 // Here, I am creating a connection variabel for the mysql server.
 var connection = mysql.createConnection(
@@ -25,7 +26,7 @@ connection.connect(function(err){
 });
 
 // Here, I am running the displayTable function, which displays the table for the user in terminal. I am writing the inquirer prompt as a callback, because I want the prompt to run after the displayTable function as completed. Initially, I had both of them global and since the query for the table data was asynchroneous and was not completeing, the inquirer function was completing first, and the table was being displayed after the inquierer return. 
-displayTable(promptUser)
+displayTable(promptUser);
 
 // Here, we define the promptUser function, which is the inquierer prompt, and also, returns the data into a then method, which runs a function that returns the data we are looking for from the table. 
 function promptUser(){
@@ -93,9 +94,10 @@ function promptUser(){
 function displayTable(callback){
 	// Here, I am creating a query for the connection to mysql, and consoling the data that is in the table. 
 	connection.query('Select * FROM products', function(err, res){
-		for (var i = 0; i< res.length; i++){
-			console.log(res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + res[i].price + " | " + res[i].stock_quantity);
-		}
+		// for (var i = 0; i< res.length; i++){
+		// 	console.log(res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + res[i].price + " | " + res[i].stock_quantity);
+		// }
+		console.table(res);
 		console.log("-----------------");
 
 		if(callback){
