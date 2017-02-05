@@ -54,38 +54,46 @@ function promptUser(){
 				throw err;
 			}
 
-			// Now, we are going to write a conditional if statement that says if there is more in stock than requested, then we are going to update the amount available using the amount purchased as the reduction amount.
-			if (res[0].stock_quantity >= response.amount) {
-				var newInventoryLevel = res[0].stock_quantity - response.amount;
-				connection.query('UPDATE products SET stock_quantity = ? WHERE item_id = ?',[newInventoryLevel, response.id], function(error, result){
-
-					if(error){
-						throw error;
-					}
-				});
-				
-				// Here, I am creating a variable that will take the column value of price with the index that is being returned, and multiply it by the amount of products that the user orders. 
-				var yourCost = res[0].price * response.amount;
-				console.log("Amount you spent: " + yourCost);
-				console.log("You dog. You spent some money!");
-				displayTable();
-
-			}
-			// Here, we are writing a case for if the stock quantity is = 0, then we tell the user we don't have any product at the time.Then we run the promtpContinue function 
-			else if(res.stock_quantity === 0){
-				console.log("We are sorry, we dont have " + res[0].product_name + "at this time.");
-				promptContinue();
-
-			}
-
-			// This is the result of the only other condition that can exist, where the quantity that was asked for is more than the amount bamazon has on hand. Then we run the promtpContinue function 
-			else {
-				console.log("We do not have enough of " + res[0].product_name + " in stock to sell you.");
+			if (res.length === 0){
+				console.log("The id you selected does not match any that we have currently. Please select another item.");
 				promptContinue();
 			}
 
+			else{
+				// Now, we are going to write a conditional if statement that says if there is more in stock than requested, then we are going to update the amount available using the amount purchased as the reduction amount.
+				if (res[0].stock_quantity >= response.amount) {
+					var newInventoryLevel = res[0].stock_quantity - response.amount;
+					connection.query('UPDATE products SET stock_quantity = ? WHERE item_id = ?',[newInventoryLevel, response.id], function(error, result){
+
+						if(error){
+							throw error;
+						}
+					});
+					
+					// Here, I am creating a variable that will take the column value of price with the index that is being returned, and multiply it by the amount of products that the user orders. 
+					var yourCost = res[0].price * response.amount;
+					console.log("Amount you spent: " + yourCost);
+					console.log("You dog. You spent some money!");
+					displayTable();
+
+				}
+				// Here, we are writing a case for if the stock quantity is = 0, then we tell the user we don't have any product at the time.Then we run the promtpContinue function 
+				else if(res.stock_quantity === 0){
+					console.log("We are sorry, we dont have " + res[0].product_name + "at this time.");
+					promptContinue();
+
+				}
+
+				// This is the result of the only other condition that can exist, where the quantity that was asked for is more than the amount bamazon has on hand. Then we run the promtpContinue function 
+				else {
+					console.log("We do not have enough of " + res[0].product_name + " in stock to sell you.");
+					promptContinue();
+				}
+
+			}
+			
 		});
-});
+	});
 }
 
 
