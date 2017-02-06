@@ -1,13 +1,8 @@
 {
   "name": "bamazon",
   "version": "1.0.0",
-  "description": "Node package.json file for bamazon",
+  "description": "This is the JSON file for the packages for the Bamazon app, which works with a MYSQL server to host data, and return it using a terminal interface. ",
   "main": "bamazonCustomer.js",
-  "dependencies": {
-    "inquirer": "^3.0.1",
-    "mysql": "^2.13.0"
-  },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/drichard1989/Bamazon/issues"
   },
-  "homepage": "https://github.com/drichard1989/Bamazon#readme"
+  "homepage": "https://github.com/drichard1989/Bamazon#readme",
+  "dependencies": {
+    "console.table": "^0.8.0",
+    "inquirer": "^3.0.1",
+    "mysql": "^2.13.0"
+  }
 }
