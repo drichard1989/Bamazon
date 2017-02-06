@@ -1,13 +1,12 @@
 'use strict';
 
 // Here, we are writing variables for the node packages that we are requiring. 
-
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var myPassword = require('./keys.js');
 var table = require ("console.table");
 
-// Here, I am creating a connection variabel for the mysql server.
+// Here, I am creating a connection variable for the mysql server.
 var connection = mysql.createConnection(
 {
 	host: "127.0.0.1",
@@ -53,7 +52,7 @@ function promptUser(){
 			if (err){
 				throw err;
 			}
-
+			// Here, I am running an if statement that says if the response that comes back has a length that is = to 0, then state in a console message that the id that was selected was incorrect. If an id was chosen that has no inventory tied to that id, the length of the response will be 0. 
 			if (res.length === 0){
 				console.log("The id you selected does not match any that we have currently. Please select another item.");
 				promptContinue();
@@ -98,25 +97,26 @@ function promptUser(){
 
 
 
-// 
+// Here, I am creating a function that has a callback inside of it. The first thing I want done is for the table to display. Once the table has been displayed, the function that has been passed into it should run as a callback. In this case, we intend to use the inquierer function. 
 function displayTable(callback){
 	// Here, I am creating a query for the connection to mysql, and consoling the data that is in the table. 
 	connection.query('Select * FROM products', function(err, res){
-		// for (var i = 0; i< res.length; i++){
-		// 	console.log(res[i].item_id + " | " + res[i].product_name + " | " + res[i].department_name + " | " + res[i].price + " | " + res[i].stock_quantity);
-		// }
+		// I am utilizing the npm package for a cleaner looking response by integrating the console.table package.
 		console.table(res);
 		console.log("-----------------");
 
+		// If there is a callback, run the callback. 
 		if(callback){
 			callback();
 		}
+		// If not, then run the promptContinue function.
 		else{
 			promptContinue();
 		}
 	});
 }
 
+// This will allow the user to decide whether they want to continue the application. Will be plugged into the application in different places, whether if they just bought something, or they selected an item that doesn't exist, allowing for application to possibly continue without dying, creating a better user experience. 
 function promptContinue(){
 	inquirer.prompt([
 		{
